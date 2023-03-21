@@ -9,15 +9,18 @@ namespace Complete
         public float m_MinSize = 6.5f;                  // The smallest orthographic size the camera can be.
         [HideInInspector] public Transform[] m_Targets; // All the targets the camera needs to encompass.
 
-
         private Camera m_Camera;                        // Used for referencing the camera.
         private float m_ZoomSpeed;                      // Reference speed for the smooth damping of the orthographic size.
         private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
         private Vector3 m_DesiredPosition;              // The position the camera is moving towards.
 
-
+        private bool splitMode = true;                  // Whether or not the camera is in split mode.
+        public float limitDistance = 25.0f;             // The distance at which the camera switches to split mode.
+        public float hysteresis = 5.0f;                 // The distance at which the camera switches back to single mode.
+        
         private void Awake ()
         {
+            splitMode = false;
             m_Camera = GetComponentInChildren<Camera> ();
         }
 
@@ -28,7 +31,10 @@ namespace Complete
             Move ();
 
             // Change the size of the camera based.
-            Zoom ();
+            if (!splitMode) Zoom ();
+            
+            // Switch between single and split mode.
+            Split ();
         }
 
 
@@ -127,6 +133,65 @@ namespace Complete
 
             // Find and set the required size of the camera.
             m_Camera.orthographicSize = FindRequiredSize ();
+        }
+        
+        private void Split()
+        {
+			var distance = Vector3.Distance (m_Targets[0].position, m_Targets[1].position);
+
+            // Check if last frame's update set the cullingMask to zero. If this is the case, then disable the m_Camera in the next frame (this one). More explanations below.
+            if (m_Camera.enabled == true && m_Camera.cullingMask == 0)
+            {
+                m_Camera.enabled = false;
+                m_Camera.gameObject.SetActive (false);
+            }
+
+            switch (splitMode)
+            {
+                case true when distance < limitDistance - hysteresis:
+                {
+                    Debug.Log ("Disable SplitScreen");
+                    splitMode = false;
+
+                    // Set m_Camera's culling mask to DEFAULT to render all objects again
+                    m_Camera.cullingMask = 1;
+                    m_Camera.enabled = true;
+                    m_Camera.gameObject.SetActive (true);
+
+                    // Disable all other tank cameras
+                    foreach (var tankCamera in Resources.FindObjectsOfTypeAll<Camera>())
+                    {
+                        if (!tankCamera.name.StartsWith("Camera")) continue;
+                        tankCamera.enabled = false;
+                        tankCamera.gameObject.SetActive (false);
+                    }
+
+                    break;
+                }
+                case false when distance > limitDistance + hysteresis:
+                {
+                    Debug.Log ("Enable SplitScreen");
+                    splitMode = true;
+
+                    // To prevent m_Camera's last frame from being shown when switching to tank cameras
+                    // we set m_Camera.cullingMask to NOTHING so the camera will render no objects on the screen thus
+                    // showing the default BLACK background color.
+
+                    // We, however, cannot disable m_Camera in this FixedUpdate() frame, because doing so would still render the last frame remains
+                    // on both sides of the screen. To prevent this effect, we have to disable m_Camera on the next FixedUpdate() invocation (next frame).
+                    m_Camera.cullingMask = 0;
+                
+                    // Enable all other tank cameras
+                    foreach (var tankCamera in Resources.FindObjectsOfTypeAll<Camera>())
+                    {
+                        if (!tankCamera.name.StartsWith("Camera")) continue;
+                        tankCamera.enabled = true;
+                        tankCamera.gameObject.SetActive (true);
+                    }
+
+                    break;
+                }
+            }
         }
     }
 }

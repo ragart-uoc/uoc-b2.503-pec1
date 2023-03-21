@@ -39,6 +39,8 @@ namespace Complete
 
         private void SpawnAllTanks()
         {
+            Camera mainCam = GameObject.Find ("Main Camera").GetComponent<Camera>();
+            
             // For all the tanks...
             for (int i = 0; i < m_Tanks.Length; i++)
             {
@@ -47,6 +49,7 @@ namespace Complete
                     Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
                 m_Tanks[i].m_PlayerNumber = i + 1;
                 m_Tanks[i].Setup();
+                AddCamera(i, mainCam);
             }
         }
 
@@ -66,7 +69,17 @@ namespace Complete
             // These are the targets the camera should follow.
             m_CameraControl.m_Targets = targets;
         }
-
+        
+        private void AddCamera(int i, Camera mainCam) {
+            var childCam = new GameObject( "Camera"+(i+1) );
+            var newCam = childCam.AddComponent<Camera>();        
+            newCam.CopyFrom(mainCam);
+    
+            childCam.transform.parent = m_Tanks[i].m_Instance.transform;
+            newCam.rect = i==0
+                ? new Rect (0.0f, 0.5f, 0.89f, 0.5f)
+                : new Rect (0.11f, 0.0f, 0.89f, 0.5f);
+        }
 
         // This is called from start and will run each phase of the game one after another.
         private IEnumerator GameLoop ()

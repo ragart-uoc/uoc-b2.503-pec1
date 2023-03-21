@@ -93,9 +93,13 @@ namespace Complete
             m_Fired = true;
 
             // Create an instance of the shell and store a reference to it's rigidbody.
-            Rigidbody shellInstance;
-            if (m_AltFired) shellInstance = Instantiate (m_AltShell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
-            else shellInstance = Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
+            var position = m_FireTransform.position;
+            var rotation = m_FireTransform.rotation;
+            var shellInstance = m_AltFired switch
+            {
+                true => Instantiate(m_AltShell, position, rotation),
+                _ => Instantiate(m_Shell, position, rotation)
+            };
 
             // Set the shell's velocity to the launch force in the fire position's forward direction.
             shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
