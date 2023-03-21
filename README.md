@@ -1,4 +1,4 @@
-# UOC - B2.503 - M1
+# UOC - B2.503 - PEC1
 
-A simple Unity project created to test the contents in M1
+The Unity project for the PEC1 activity
 
