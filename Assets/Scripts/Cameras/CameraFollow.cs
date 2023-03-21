@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Complete {
-	
+namespace PEC1.Cameras
+{
     public class CameraFollow : MonoBehaviour {
         
         private Camera m_Camera;                        // Camera reference              

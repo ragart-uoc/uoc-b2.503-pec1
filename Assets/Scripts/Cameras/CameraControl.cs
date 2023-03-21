@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Complete
+namespace PEC1.Cameras
 {
     public class CameraControl : MonoBehaviour
     {
