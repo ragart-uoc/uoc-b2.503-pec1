@@ -1,84 +1,110 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using PEC1.Tank;
 
 namespace PEC1.Managers
 {
+    /// <summary>
+    /// Class <c>TankManager</c> is used to manage various settings on a tank. It works with the GameManager class to control how the tanks behave and whether or not players have control of their tank in the different phases of the game.
+    /// </summary>
     [Serializable]
     public class TankManager
     {
-        // This class is to manage various settings on a tank.
-        // It works with the GameManager class to control how the tanks behave
-        // and whether or not players have control of their tank in the 
-        // different phases of the game.
 
-        public Color m_PlayerColor;                             // This is the color this tank will be tinted.
-        public Transform m_SpawnPoint;                          // The position and direction the tank will have when it spawns.
-        [HideInInspector] public int m_PlayerNumber;            // This specifies which player this the manager for.
-        [HideInInspector] public string m_ColoredPlayerText;    // A string that represents the player with their number colored to match their tank.
-        [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
-        [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
-        
+        /// <value>Property <c>playerColor</c> represents the color this tank will be tinted.</value>
+        [FormerlySerializedAs("m_PlayerColor")]
+        public Color playerColor;
 
-        private TankMovement m_Movement;                        // Reference to tank's movement script, used to disable and enable control.
-        private TankShooting m_Shooting;                        // Reference to tank's shooting script, used to disable and enable control.
-        private GameObject m_CanvasGameObject;                  // Used to disable the world space UI during the Starting and Ending phases of each round.
+        /// <value>Property <c>spawnPoint</c> represents the position and direction the tank will have when it spawns.</value>
+        [FormerlySerializedAs("m_SpawnPoint")]
+        public Transform spawnPoint;
 
+        /// <value>Property <c>playerNumber</c> specifies which player this the manager for.</value>
+        [FormerlySerializedAs("m_PlayerNumber")]
+        [HideInInspector] public int playerNumber;
 
-        public void Setup ()
+        /// <value>Property <c>coloredPlayerText</c> represents the player with their number colored to match their tank.</value>
+        [FormerlySerializedAs("m_ColoredPlayerText")]
+        [HideInInspector] public string coloredPlayerText;
+
+        /// <value>Property <c>instance</c> represents the instance of the tank when it is created.</value>
+        [FormerlySerializedAs("m_Instance")]
+        [HideInInspector] public GameObject instance;
+
+        /// <value>Property <c>wins</c> represents the number of wins this player has so far.</value>
+        [FormerlySerializedAs("m_Wins")] [HideInInspector]
+        public int wins;
+
+        /// <value>Property <c>m_Movement</c> represents the tank's movement script, used to disable and enable control.</value>
+        private TankMovement m_Movement;
+
+        /// <value>Property <c>m_Shooting</c> represents the tank's shooting script, used to disable and enable control.</value>
+        private TankShooting m_Shooting;
+
+        /// <value>Property <c>m_CanvasGameObject</c> is used to disable the world space UI during the Starting and Ending phases of each round.</value>
+        private GameObject m_CanvasGameObject;
+
+        /// <summary>
+        /// Method <c>Setup</c> is used to configure the tank.
+        /// </summary>
+        public void Setup()
         {
             // Get references to the components.
-            m_Movement = m_Instance.GetComponent<TankMovement> ();
-            m_Shooting = m_Instance.GetComponent<TankShooting> ();
-            m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas> ().gameObject;
+            m_Movement = instance.GetComponent<TankMovement>();
+            m_Shooting = instance.GetComponent<TankShooting>();
+            m_CanvasGameObject = instance.GetComponentInChildren<Canvas>().gameObject;
 
             // Set the player numbers to be consistent across the scripts.
-            m_Movement.m_PlayerNumber = m_PlayerNumber;
-            m_Shooting.m_PlayerNumber = m_PlayerNumber;
+            m_Movement.playerNumber = playerNumber;
+            m_Shooting.playerNumber = playerNumber;
 
             // Create a string using the correct color that says 'PLAYER 1' etc based on the tank's color and the player's number.
-            m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
+            coloredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(playerColor) + ">PLAYER " + playerNumber + "</color>";
 
             // Get all of the renderers of the tank.
-            MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer> ();
+            var renderers = instance.GetComponentsInChildren<MeshRenderer>();
 
             // Go through all the renderers...
-            for (int i = 0; i < renderers.Length; i++)
+            foreach (var r in renderers)
             {
                 // ... set their material color to the color specific to this tank.
-                renderers[i].material.color = m_PlayerColor;
+                r.material.color = playerColor;
             }
         }
 
-
-        // Used during the phases of the game where the player shouldn't be able to control their tank.
-        public void DisableControl ()
+        /// <summary>
+        /// Method <c>DisableControl</c> is used to disable the tank during the phases of the game where the player shouldn't be able to control it.
+        /// </summary>
+        public void DisableControl()
         {
             m_Movement.enabled = false;
             m_Shooting.enabled = false;
 
-            m_CanvasGameObject.SetActive (false);
+            m_CanvasGameObject.SetActive(false);
         }
 
-
-        // Used during the phases of the game where the player should be able to control their tank.
-        public void EnableControl ()
+        /// <summary>
+        /// Method <c>EnableControl</c> is used to enable the tank during the phases of the game where the player should be able to control it.
+        /// </summary>
+        public void EnableControl()
         {
             m_Movement.enabled = true;
             m_Shooting.enabled = true;
 
-            m_CanvasGameObject.SetActive (true);
+            m_CanvasGameObject.SetActive(true);
         }
 
-
-        // Used at the start of each round to put the tank into it's default state.
-        public void Reset ()
+        /// <summary>
+        /// Method <c>Reset</c> is used at the start of each round to put the tank into its default state.
+        /// </summary>
+        public void Reset()
         {
-            m_Instance.transform.position = m_SpawnPoint.position;
-            m_Instance.transform.rotation = m_SpawnPoint.rotation;
+            instance.transform.position = spawnPoint.position;
+            instance.transform.rotation = spawnPoint.rotation;
 
-            m_Instance.SetActive (false);
-            m_Instance.SetActive (true);
+            instance.SetActive(false);
+            instance.SetActive(true);
         }
     }
 }
