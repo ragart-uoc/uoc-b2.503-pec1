@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 using PEC1.Cameras;
 
 namespace PEC1.Managers
@@ -30,7 +30,7 @@ namespace PEC1.Managers
 
         /// <value>Property <c>messageText</c> is a reference to the overlay Text to display winning text, etc.</value>
         [FormerlySerializedAs("m_MessageText")]
-        public Text messageText;
+        public TextMeshProUGUI messageText;
 
         /// <value>Property <c>tankPrefab</c> represents the prefab to use for the tanks.</value>
         [FormerlySerializedAs("m_TankPrefab")]

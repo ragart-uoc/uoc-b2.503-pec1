@@ -69,7 +69,7 @@ namespace PEC1.Cameras
             if (!m_SplitMode) Zoom();
 
             // Switch between single and split mode.
-            Split();
+            //Split();
         }
 
         /// <summary>
