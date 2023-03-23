@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using PEC1.Tank;
 
@@ -45,6 +46,9 @@ namespace PEC1.Managers
         /// <value>Property <c>m_CanvasGameObject</c> is used to disable the world space UI during the Starting and Ending phases of each round.</value>
         private GameObject m_CanvasGameObject;
 
+        /// <value>Property <c>m_PlayerInput</c> represents the tank's PlayerInput component.</value>
+        private PlayerInput m_PlayerInput;
+
         /// <summary>
         /// Method <c>Setup</c> is used to configure the tank.
         /// </summary>
@@ -53,6 +57,7 @@ namespace PEC1.Managers
             // Get references to the components.
             m_Movement = instance.GetComponent<TankMovement>();
             m_Shooting = instance.GetComponent<TankShooting>();
+            m_PlayerInput = instance.GetComponent<PlayerInput>();
             m_CanvasGameObject = instance.GetComponentInChildren<Canvas>().gameObject;
 
             // Set the player numbers to be consistent across the scripts.
@@ -71,6 +76,9 @@ namespace PEC1.Managers
                 // ... set their material color to the color specific to this tank.
                 r.material.color = playerColor;
             }
+            
+            // Assign the control scheme
+            AssignControlScheme();
         }
 
         /// <summary>
@@ -100,11 +108,21 @@ namespace PEC1.Managers
         /// </summary>
         public void Reset()
         {
+            // Reset the tank's position and rotation
             instance.transform.position = spawnPoint.position;
             instance.transform.rotation = spawnPoint.rotation;
 
+            // Reset the tank's health
             instance.SetActive(false);
             instance.SetActive(true);
+            
+            // Reassign the control scheme
+            AssignControlScheme();
+        }
+        
+        private void AssignControlScheme()
+        {
+            m_PlayerInput.SwitchCurrentControlScheme("Keyboard" + playerNumber, Keyboard.current);
         }
     }
 }

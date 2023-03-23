@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -53,23 +54,28 @@ namespace PEC1.Tank
         [FormerlySerializedAs("m_MaxChargeTime")]
         public float maxChargeTime = 0.75f;
 
-        /// <value>Property <c>m_FireButton</c> represents the input axis that is used for launching shells.</value>
-        private string m_FireButton;
-
-        /// <value>Property <c>m_AltFireButton</c> represents the input axis that is used for launching alternative shells.</value>
-        private string m_AltFireButton;
-
         /// <value>Property <c>m_CurrentLaunchForce</c> represents the force that will be given to the shell when the fire button is released.</value>
         private float m_CurrentLaunchForce;
 
         /// <value>Property <c>m_ChargeSpeed</c> represents how fast the launch force increases, based on the max charge time.</value>
         private float m_ChargeSpeed;
-
-        /// <value>Property <c>m_Fired</c> represents whether or not the shell has been launched with this button press.</value>
+        
+        /// <value>Property <c>m_PlayerInput</c> represents the player input.</value>
+        private PlayerInput m_PlayerInput;
+        
+        /// <value>Property <c>m_Fired</c> represents if any shell has been fired.</value>
         private bool m_Fired;
-
-        /// <value>Property <c>m_AltFired</c> represents whether or not the alternative shell has been launched with this button press.</value>
+        
+        /// <value>Property <c>m_AltFired</c> represents if the alternative shell has been fired.</value>
         private bool m_AltFired;
+        
+        /// <summary>
+        /// Method <c>Awake</c> is called when the script instance is being loaded.
+        /// </summary>
+        private void Awake()
+        {
+            m_PlayerInput = GetComponent<PlayerInput>();
+        }
 
         /// <summary>
         /// Method <c>OnEnable</c> is called when the object becomes enabled and active.
@@ -86,12 +92,6 @@ namespace PEC1.Tank
         /// </summary>
         private void Start()
         {
-            // The fire axis is based on the player number.
-            m_FireButton = "Fire" + playerNumber;
-
-            // The alternative fire axis is based on the player number.
-            m_AltFireButton = "AltFire" + playerNumber;
-
             // The rate that the launch force charges up is the range of possible forces by the max charge time.
             m_ChargeSpeed = (maxLaunchForce - minLaunchForce) / maxChargeTime;
         }
@@ -105,7 +105,7 @@ namespace PEC1.Tank
             aimSlider.value = minLaunchForce;
 
             // If the max force has been exceeded and the shell hasn't yet been launched...
-            if (m_CurrentLaunchForce >= maxLaunchForce && !m_Fired)
+            if (m_CurrentLaunchForce >= maxLaunchForce && (FireButton(1)))
             {
                 // ... use the max force and launch the shell.
                 m_CurrentLaunchForce = maxLaunchForce;
@@ -114,7 +114,7 @@ namespace PEC1.Tank
             // Otherwise, if the fire button has just started being pressed...
             else if (FireButton(0))
             {
-                // ... reset the fired flag and reset the launch force.
+                // ... reset the fired flag and reset the launch force
                 m_Fired = false;
                 m_CurrentLaunchForce = minLaunchForce;
 
@@ -127,7 +127,6 @@ namespace PEC1.Tank
             {
                 // Increment the launch force and update the slider.
                 m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
-
                 aimSlider.value = m_CurrentLaunchForce;
             }
             // Otherwise, if the fire button is released and the shell hasn't been launched yet...
@@ -143,9 +142,9 @@ namespace PEC1.Tank
         /// </summary>
         private void Fire()
         {
-            // Set the fired flag so only Fire is only called once.
+            // Set the fired flag so only Fire is only called once
             m_Fired = true;
-
+            
             // Create an instance of the shell and store a reference to it's rigidbody.
             var position = fireTransform.position;
             var rotation = fireTransform.rotation;
@@ -165,29 +164,42 @@ namespace PEC1.Tank
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = minLaunchForce;
+            
+            // Reset the alt fire flag.
+            m_AltFired = false;
         }
 
         /// <summary>
         /// Method <c>FireButton</c> returns whether or not the fire button has been pressed.
         /// </summary>
-        private bool FireButton(int mode) {
-            var action = false;
-            m_AltFired = false;
+        private bool FireButton(int mode)
+        {
+            // Set the firing and alt firing flags.
+            var firing = false;
+            var altfiring = false;
+            
+            // Get the fire and alt fire actions.
+            var fireAction = m_PlayerInput.actions["Fire"];
+            var altFireAction = m_PlayerInput.actions["AltFire"];
+            
+            // Check if it's and alt fire.
+            m_AltFired = altFireAction.IsPressed() || altFireAction.WasPressedThisFrame() || altFireAction.WasReleasedThisFrame();
+
             switch (mode) {
                 case 0:
-                    action = Input.GetButtonDown(m_FireButton);
-                    m_AltFired = Input.GetButtonDown(m_AltFireButton);
+                    firing = fireAction.WasPressedThisFrame() && fireAction.IsPressed();
+                    altfiring = altFireAction.WasPressedThisFrame() && altFireAction.IsPressed();
                     break;
                 case 1:
-                    action = Input.GetButton(m_FireButton);
-                    m_AltFired = Input.GetButton(m_AltFireButton);
+                    firing = fireAction.IsPressed();
+                    altfiring = altFireAction.IsPressed();
                     break;
                 case 2:
-                    action = Input.GetButtonUp(m_FireButton);
-                    m_AltFired = Input.GetButtonUp(m_AltFireButton);
+                    firing = fireAction.WasReleasedThisFrame();
+                    altfiring = altFireAction.WasReleasedThisFrame();
                     break;
             }
-            return action || m_AltFired;
+            return firing || altfiring;
         }
     }
 }

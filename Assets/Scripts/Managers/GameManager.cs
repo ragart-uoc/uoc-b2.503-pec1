@@ -82,9 +82,10 @@ namespace PEC1.Managers
             for (var i = 0; i < tanks.Length; i++)
             {
                 // ... create them, set their player number and references needed for control.
+                var playerNumber = i + 1;
                 tanks[i].instance =
                     Instantiate(tankPrefab, tanks[i].spawnPoint.position, tanks[i].spawnPoint.rotation);
-                tanks[i].playerNumber = i + 1;
+                tanks[i].playerNumber = playerNumber;
                 tanks[i].Setup();
                 AddCamera(i, mainCam);
             }
