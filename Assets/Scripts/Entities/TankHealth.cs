@@ -2,7 +2,7 @@
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace PEC1.Tank
+namespace PEC1.Entities
 {
     /// <summary>
     /// Class <c>TankHealth</c> is used to manage the health of the tank.

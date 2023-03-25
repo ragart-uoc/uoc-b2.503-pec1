@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
-using PEC1.Tank;
 
-namespace PEC1.Shell
+namespace PEC1.Entities
 {
     /// <summary>
     /// Class <c>ShellExplosion</c> is used to make the shell explode.

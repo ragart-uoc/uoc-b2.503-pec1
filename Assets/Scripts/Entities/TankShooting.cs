@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace PEC1.Tank
+namespace PEC1.Entities
 {
     /// <summary>
     /// Class <c>TankShooting</c> is used to control the shooting of the tank.
@@ -59,16 +59,16 @@ namespace PEC1.Tank
 
         /// <value>Property <c>m_ChargeSpeed</c> represents how fast the launch force increases, based on the max charge time.</value>
         private float m_ChargeSpeed;
-        
+
         /// <value>Property <c>m_PlayerInput</c> represents the player input.</value>
         private PlayerInput m_PlayerInput;
-        
+
         /// <value>Property <c>m_Fired</c> represents if any shell has been fired.</value>
         private bool m_Fired;
-        
+
         /// <value>Property <c>m_AltFired</c> represents if the alternative shell has been fired.</value>
         private bool m_AltFired;
-        
+
         /// <summary>
         /// Method <c>Awake</c> is called when the script instance is being loaded.
         /// </summary>
@@ -144,7 +144,7 @@ namespace PEC1.Tank
         {
             // Set the fired flag so only Fire is only called once
             m_Fired = true;
-            
+
             // Create an instance of the shell and store a reference to it's rigidbody.
             var position = fireTransform.position;
             var rotation = fireTransform.rotation;
@@ -164,7 +164,7 @@ namespace PEC1.Tank
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = minLaunchForce;
-            
+
             // Reset the alt fire flag.
             m_AltFired = false;
         }
@@ -177,11 +177,11 @@ namespace PEC1.Tank
             // Set the firing and alt firing flags.
             var firing = false;
             var altfiring = false;
-            
+
             // Get the fire and alt fire actions.
             var fireAction = m_PlayerInput.actions["Fire"];
             var altFireAction = m_PlayerInput.actions["AltFire"];
-            
+
             // Check if it's and alt fire.
             m_AltFired = altFireAction.IsPressed() || altFireAction.WasPressedThisFrame() || altFireAction.WasReleasedThisFrame();
 

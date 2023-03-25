@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-namespace PEC1.Tank
+namespace PEC1.Entities
 {
     /// <summary>
     /// Class <c>TankMovement</c> is used to move the tank.
@@ -54,7 +54,7 @@ namespace PEC1.Tank
 
         /// <value>Property <c>m_MoveInput</c> represents the current value of the move input.</value>
         private Vector2 m_MoveInput;
-        
+
         /// <summary>
         /// Method <c>Awake</c> is called when the script instance is being loaded.
         /// </summary>
@@ -62,7 +62,7 @@ namespace PEC1.Tank
         {
             m_Rigidbody = GetComponent<Rigidbody>();
         }
-        
+
         /// <summary>
         /// Method <c>OnEnable</c> is called when the object becomes enabled and active.
         /// </summary>
@@ -99,7 +99,7 @@ namespace PEC1.Tank
                 p.Stop();
             }
         }
-        
+
         /// <summary>
         /// Method <c>Start</c> is called on the frame when a script is enabled just before any of the Update methods are called the first time.
         /// </summary>
@@ -108,7 +108,7 @@ namespace PEC1.Tank
             // Store the original pitch of the audio source.
             m_OriginalPitch = movementAudio.pitch;
         }
-        
+
         /// <summary>
         /// Method <c>Update</c> is called every frame, if the MonoBehaviour is enabled.
         /// </summary>
@@ -125,7 +125,7 @@ namespace PEC1.Tank
             Move();
             Turn();
         }
-        
+
         /// <summary>
         /// Method <c>OnMove</c> is called when the move input is changed.
         /// </summary>
@@ -133,7 +133,7 @@ namespace PEC1.Tank
         {
             m_MoveInput = value.Get<Vector2>();
         }
-        
+
         /// <summary>
         /// Method <c>Move</c> is used to move the tank.
         /// </summary>
@@ -156,7 +156,7 @@ namespace PEC1.Tank
         {
             // Assign the input value to the appropriate direction
             m_TurnInputValue = m_MoveInput.x;
-            
+
             // Determine the number of degrees to be turned based on the input, speed and time between frames.
             var turn = m_TurnInputValue * turnSpeed * Time.deltaTime;
 
@@ -166,7 +166,7 @@ namespace PEC1.Tank
             // Apply this rotation to the rigidbody's rotation.
             m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
         }
-        
+
         /// <summary>
         /// Method <c>EngineAudio</c> is used to play different audio clips based on the tank's movement and whether or not the tank is stationary.
         /// </summary>

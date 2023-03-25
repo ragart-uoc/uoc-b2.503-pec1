@@ -1,0 +1,572 @@
+{
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "Player1",
+            "id": "f46cc9b5-98f1-4946-8756-89be46482c48",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "a1db1be9-6ec2-4599-bc4c-261ba2aa1c4c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Fire",
+                    "type": "Value",
+                    "id": "022a6b48-942b-43f4-af69-630e1a6ce911",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "AltFire",
+                    "type": "Value",
+                    "id": "bd5fc915-b810-44c8-9a35-ed0564452cea",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Join",
+                    "type": "Button",
+                    "id": "529b603b-cb88-425d-aa25-a47e232720b1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "4f7e03c8-2f47-41ce-90a0-30972926da53",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "7fea0e6b-5bbb-4b81-9e77-150cb2c6e792",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "485f80f6-c2b6-4483-af34-b6d796c92b4a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "cb3168c5-3a30-48de-a6c0-fa7f13c1cd5f",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "8610e75d-ef5b-4e7c-8b53-e97cdd0d0263",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7fd7a9a2-b02a-447e-939f-2f799d1e8d77",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c5e338cc-e9f8-4150-8caf-2265368afa80",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player2",
+            "id": "0fd5192b-9d0f-4d29-be5f-cfe4da1f595f",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "25010e25-1b3f-4dfb-8de9-151abf068eb9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Fire",
+                    "type": "Value",
+                    "id": "9ff5a958-5f4e-4870-a9ba-4b51b1b1acb4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "AltFire",
+                    "type": "Value",
+                    "id": "db023412-358e-40f4-a95b-be2ad34eeb81",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Join",
+                    "type": "Button",
+                    "id": "1f8b7376-73a7-46f6-ad99-6ee3d7695811",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c6c1c1a6-b9f9-4e1a-96a7-759f2fe8c679",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5fd90110-e409-4b32-ab83-1bab39737501",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "IJKL",
+                    "id": "889b4608-e15e-4230-92ef-8c9b4f65be7b",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "f245d363-9cd8-4eff-8788-4f91ad011355",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "5803008a-4a5e-484a-a4a4-e3bf7bf38aab",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "f053e5ec-4e0c-48a0-95df-78fcae4f2289",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "ed2b9ef8-abb1-4ccd-8458-1846444050cf",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player3",
+            "id": "ab94277a-32f5-446b-9a14-0fa5ce007a8c",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "14a2bd96-f169-46d9-9e9f-db57446c12cd",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Fire",
+                    "type": "Value",
+                    "id": "de2a01d3-03f5-4706-8c16-42340f6e4458",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "AltFire",
+                    "type": "Value",
+                    "id": "690c38a4-07f4-4c77-aabf-e4cd646ce759",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Join",
+                    "type": "Button",
+                    "id": "90d616b9-60b6-40ae-8a11-a2480747b2f1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5e7cc701-b240-4185-bab1-8ba88c953fe7",
+                    "path": "<Keyboard>/rightCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "88c05ee5-3228-4e41-997c-27b2058b1463",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04638f15-2dd5-4f5f-a541-ab61104015a7",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Arrows",
+                    "id": "c6abeb84-68d5-4ba9-8500-978ecee044f0",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "6b2ffccb-d532-4004-9ca1-2a2d1d40181d",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "76aabf8b-7304-46d1-8c5c-2847724cba9b",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "e7cf42a1-056f-4843-8829-dd5958c3c4e0",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "ac74470b-1283-424f-80da-649f954259f6",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player4",
+            "id": "24d702fe-38b8-4d86-9a3c-5dd0b3548d13",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "eeca3ea9-9f8c-4b6a-9b7d-eb2959bff0a5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Fire",
+                    "type": "Value",
+                    "id": "aaf3cc79-d78d-4eb4-808f-5704ef407135",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "AltFire",
+                    "type": "Value",
+                    "id": "db8b9df3-e34b-4d05-bb66-19848d9ca1f4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Join",
+                    "type": "Button",
+                    "id": "00f6b664-5959-4d03-8c72-e70506f538c6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c74d2062-57e3-4a37-903e-f4be54f0b019",
+                    "path": "<Keyboard>/numpad7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a540f65-2d46-4235-8b84-d94c75bb1326",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7a774607-5e0a-410f-8f39-faa5a564ceb4",
+                    "path": "<Keyboard>/numpad9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Numpad",
+                    "id": "5549b7c1-0c55-4370-9205-24abb675eb4b",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "0c58c49d-75a3-422e-bb95-3a908b0755a6",
+                    "path": "<Keyboard>/numpad8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "cec01e16-c901-4ffe-afe4-aef8b9394217",
+                    "path": "<Keyboard>/numpad5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "d2117c93-d6d0-4d6d-a534-72ddc59f33bc",
+                    "path": "<Keyboard>/numpad4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "84775392-4dcd-4b43-954e-bcb6c1b88d81",
+                    "path": "<Keyboard>/numpad6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "PlayerManagement",
+            "id": "88b7245d-90b6-4f34-9de5-2bc8677e4655",
+            "actions": [
+                {
+                    "name": "Player3Join",
+                    "type": "Button",
+                    "id": "a93e7b32-e848-467c-afc4-dcfd8e995fa5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player4Join",
+                    "type": "Button",
+                    "id": "a4363a26-832d-453b-9641-8e4a1535e795",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b927c63b-2548-4ebb-8054-b3146fd45745",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Player3Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91b4b7d1-2e7a-44a3-870f-0c0f848f82f5",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Player4Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

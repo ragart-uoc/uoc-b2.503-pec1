@@ -10724,7 +10724,7 @@ MonoBehaviour:
     m_ActionName: Tank/Join[/Keyboard/enter,/Keyboard/numpadEnter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Tank
+  m_DefaultActionMap: f46cc9b5-98f1-4946-8756-89be46482c48
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &173936

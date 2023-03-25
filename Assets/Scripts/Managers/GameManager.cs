@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using PEC1.Cameras;
+using PEC1.Entities;
 
 namespace PEC1.Managers
 {
@@ -28,6 +31,9 @@ namespace PEC1.Managers
         [FormerlySerializedAs("m_CameraControl")]
         public CameraControl cameraControl;
 
+        /// <value>Property <c>playersInfo</c> is a reference to the text displaying the player information.</value>
+        public GameObject playersInfo;
+
         /// <value>Property <c>messageText</c> is a reference to the overlay Text to display winning text, etc.</value>
         [FormerlySerializedAs("m_MessageText")]
         public TextMeshProUGUI messageText;
@@ -35,10 +41,6 @@ namespace PEC1.Managers
         /// <value>Property <c>tankPrefab</c> represents the prefab to use for the tanks.</value>
         [FormerlySerializedAs("m_TankPrefab")]
         public GameObject tankPrefab;
-
-        /// <value>Property <c>tanks</c> is a collection of managers for enabling and disabling different aspects of the tanks.</value>
-        [FormerlySerializedAs("m_Tanks")]
-        public TankManager[] tanks;
 
         /// <value>Property <c>m_RoundNumber</c> represents which round the game is currently on.</value>
         private int m_RoundNumber;
@@ -50,20 +52,39 @@ namespace PEC1.Managers
         private WaitForSeconds m_EndWait;
 
         /// <value>Property <c>m_RoundWinner</c> is a reference to the winner of the current round. Used to make an announcement of who won.</value>
-        private TankManager m_RoundWinner;
+        private Tank m_RoundWinner;
 
         /// <value>Property <c>m_GameWinner</c> is a reference to the winner of the game. Used to make an announcement of who won.</value>
-        private TankManager m_GameWinner;
+        private Tank m_GameWinner;
+
+        /// <value>Property <c>m_PlayerManager</c> is a reference to the PlayerManager script.</value>
+        private PlayerManager m_PlayerManager;
+
+        /// <value>Property <c>m_TankManager</c> is a reference to the TankManager script.</value>
+        private TankManager m_TankManager;
+
+        /// <value>Property <c>m_PlayerInput</c> is a reference to the PlayerInput script.</value>
+        private PlayerInput m_PlayerInput;
 
         /// <summary>
         /// Method <c>Start</c> is called on the frame when a script is enabled just before any of the Update methods are called the first time.
         /// </summary>
         private void Start()
         {
+            // Get the PlayerInput component.
+            m_PlayerInput = GetComponent<PlayerInput>();
+
+            // Get both the PlayerManager and the TankManager and create the players.
+            m_PlayerManager = FindObjectOfType<PlayerManager>();
+            m_TankManager = FindObjectOfType<TankManager>();
+            CreatePlayers();
+            UpdatePlayerInfo();
+
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds(startDelay);
             m_EndWait = new WaitForSeconds(endDelay);
 
+            // Spawn all the tanks and include them as camera targets.
             SpawnAllTanks();
             SetCameraTargets();
 
@@ -72,23 +93,43 @@ namespace PEC1.Managers
         }
 
         /// <summary>
+        /// Method <c>CreatePlayers</c> creates the players.
+        /// </summary>
+        private void CreatePlayers()
+        {
+            var basePlayerNumber = m_PlayerManager.GetBasePlayers();
+            var tanks = m_TankManager.GetTanks();
+            for (var playerNumber = 1; playerNumber <= basePlayerNumber; playerNumber++)
+            {
+                m_PlayerManager.AddPlayer(playerNumber, tanks[playerNumber - 1]);
+            }
+        }
+
+        /// <summary>
         /// Method <c>SpawnAllTanks</c> spanws all the tanks and set their references and player numbers.
         /// </summary>
         private void SpawnAllTanks()
         {
-            var mainCam = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-            // For all the tanks...
-            for (var i = 0; i < tanks.Length; i++)
+            var players = m_PlayerManager.GetPlayers();
+            foreach (var p in players)
             {
-                // ... create them, set their player number and references needed for control.
-                var playerNumber = i + 1;
-                tanks[i].instance =
-                    Instantiate(tankPrefab, tanks[i].spawnPoint.position, tanks[i].spawnPoint.rotation);
-                tanks[i].playerNumber = playerNumber;
-                tanks[i].Setup();
-                AddCamera(i, mainCam);
+                SpawnTank(p.PlayerNumber);
             }
+        }
+
+        /// <summary>
+        /// Method <c>SpawnTank</c> spawns a tank and sets its references and player number.
+        /// </summary>
+        /// <param name="playerNumber">The player number.</param>
+        private void SpawnTank(int playerNumber)
+        {
+            //var mainCam = GameObject.Find("Main Camera").GetComponent<Camera>();
+            var player = m_PlayerManager.GetPlayer(playerNumber);
+            player.Tank.playerNumber = playerNumber;
+            player.Tank.instance =
+                Instantiate(tankPrefab, player.Tank.spawnPoint.position, player.Tank.spawnPoint.rotation);
+            player.Tank.Setup();
+            //AddCamera(player.PlayerNumber, mainCam);
         }
 
         /// <summary>
@@ -96,30 +137,25 @@ namespace PEC1.Managers
         /// </summary>
         private void SetCameraTargets()
         {
-            // Create a collection of transforms the same size as the number of tanks.
-            var targets = new Transform[tanks.Length];
-
-            // For each of these transforms...
-            for (var i = 0; i < targets.Length; i++)
-            {
-                // ... set it to the appropriate tank transform.
-                targets[i] = tanks[i].instance.transform;
-            }
-
+            var tanks = m_PlayerManager.GetPlayers().Select(p => p.Tank).ToList();
             // These are the targets the camera should follow.
-            cameraControl.targets = targets;
+            var targetList = tanks.Select(tank => tank.instance.transform).ToArray();
+            cameraControl.targets = targetList;
         }
 
         /// <summary>
         /// Method <c>AddCamera</c> adds a camera to a tank.
         /// </summary>
-        private void AddCamera(int i, Camera mainCam) {
-            var childCam = new GameObject( "Camera"+(i+1) );
+        /// <param name="playerNumber">The player number.</param>
+        /// <param name="mainCam">The main camera.</param>
+        private void AddCamera(int playerNumber, Camera mainCam) {
+            var childCam = new GameObject( "Camera" + (playerNumber) );
             var newCam = childCam.AddComponent<Camera>();
             newCam.CopyFrom(mainCam);
 
-            childCam.transform.parent = tanks[i].instance.transform;
-            newCam.rect = i==0
+            var tank = m_PlayerManager.GetPlayer(playerNumber).Tank;
+            childCam.transform.parent = tank.instance.transform;
+            newCam.rect = (playerNumber - 1) == 0
                 ? new Rect(0.0f, 0.5f, 0.89f, 0.5f)
                 : new Rect(0.11f, 0.0f, 0.89f, 0.5f);
         }
@@ -159,7 +195,7 @@ namespace PEC1.Managers
         {
             // As soon as the round starts reset the tanks and make sure they can't move.
             ResetAllTanks();
-            DisableTankControl();
+            DisableControls();
 
             // Snap the camera's zoom and position to something appropriate for the reset tanks.
             cameraControl.SetStartPositionAndSize();
@@ -178,7 +214,7 @@ namespace PEC1.Managers
         private IEnumerator RoundPlaying()
         {
             // As soon as the round begins playing let the players control the tanks.
-            EnableTankControl();
+            EnableControls();
 
             // Clear the text from the screen.
             messageText.text = string.Empty;
@@ -197,7 +233,7 @@ namespace PEC1.Managers
         private IEnumerator RoundEnding()
         {
             // Stop tanks from moving.
-            DisableTankControl();
+            DisableControls();
 
             // Clear the winner from the previous round.
             m_RoundWinner = null;
@@ -208,6 +244,9 @@ namespace PEC1.Managers
             // If there is a winner, increment their score.
             if (m_RoundWinner != null)
                 m_RoundWinner.wins++;
+
+            // Update the player information text.
+            UpdatePlayerInfo();
 
             // Now the winner's score has been incremented, see if someone has one the game.
             m_GameWinner = GetGameWinner();
@@ -225,24 +264,27 @@ namespace PEC1.Managers
         /// </summary>
         private bool OneTankLeft()
         {
-            var numTanksLeft = tanks.Count(tank => tank.instance.activeSelf);
+            var players = m_PlayerManager.GetPlayers();
+            var numTanksLeft = players.Count(player => player.Tank.instance.activeSelf);
             return numTanksLeft <= 1;
         }
 
         /// <summary>
         /// Method <c>GetRoundWinner</c> is called at the end of a round to determine which tank (if any) won the round.
         /// </summary>
-        private TankManager GetRoundWinner()
+        private Tank GetRoundWinner()
         {
-            return tanks.FirstOrDefault(t => t.instance.activeSelf);
+            var players = m_PlayerManager.GetPlayers();
+            return players.FirstOrDefault(p => p.Tank.instance.activeSelf)?.Tank;
         }
 
         /// <summary>
         /// Method <c>GetGameWinner</c> is called at the end of a round to determine which tank (if any) won the game.
         /// </summary>
-        private TankManager GetGameWinner()
+        private Tank GetGameWinner()
         {
-            return tanks.FirstOrDefault(t => t.wins == roundsToWin);
+            var players = m_PlayerManager.GetPlayers();
+            return players.FirstOrDefault(p => p.Tank.wins == roundsToWin)?.Tank;
         }
 
         /// <summary>
@@ -261,7 +303,8 @@ namespace PEC1.Managers
             message += "\n\n\n\n";
 
             // Go through all the tanks and add each of their scores to the message.
-            message = tanks.Aggregate(message, (current, t) => current + (t.coloredPlayerText + ": " + t.wins + " WINS\n"));
+            var players = m_PlayerManager.GetPlayers();
+            message = players.Aggregate(message, (current, p) => current + (p.Tank.coloredPlayerText + ": " + p.Tank.wins + " WINS\n"));
 
             // If there is a game winner, change the entire message to reflect that.
             if (m_GameWinner != null)
@@ -275,31 +318,99 @@ namespace PEC1.Managers
         /// </summary>
         private void ResetAllTanks()
         {
-            foreach (var t in tanks)
+            var players = m_PlayerManager.GetPlayers();
+            foreach (var p in players)
             {
-                t.Reset();
+                p.Tank.Reset();
             }
         }
 
         /// <summary>
-        /// Method <c>EnableTankControl</c> is used to turn all the tanks back on so that the players can control them.
+        /// Method <c>EnableControls</c> is used to turn all the tanks back on so that the players can control them.
         /// </summary>
-        private void EnableTankControl()
+        private void EnableControls()
         {
-            foreach (var t in tanks)
+            m_PlayerInput.enabled = true;
+            m_PlayerInput.SwitchCurrentControlScheme("Keyboard", Keyboard.current);
+            m_PlayerInput.SwitchCurrentActionMap("PlayerManagement");
+            var players = m_PlayerManager.GetPlayers();
+            foreach (var p in players)
             {
-                t.EnableControl();
+                p.Tank.EnableControl();
             }
         }
 
         /// <summary>
-        /// Method <c>DisableTankControl</c> is used to turn all the tanks off so that the players can't control them.
+        /// Method <c>DisableControls</c> is used to turn all the tanks off so that the players can't control them.
         /// </summary>
-        private void DisableTankControl()
+        private void DisableControls()
         {
-            foreach (var t in tanks)
+            m_PlayerInput.enabled = false;
+            var players = m_PlayerManager.GetPlayers();
+            foreach (var p in players)
             {
-                t.DisableControl();
+                p.Tank.DisableControl();
+            }
+        }
+
+        /// <summary>
+        /// Method <c>OnPlayer3Join</c> is called when the player 3 join button is pressed.
+        /// </summary>
+        /// <param name="inputValue">The input value.</param>
+        private void OnPlayer3Join(InputValue inputValue)
+        {
+            StartCoroutine(Join(3));
+        }
+
+        /// <summary>
+        /// Method <c>OnPlayer4Join</c> is called when the player 4 join button is pressed.
+        /// </summary>
+        /// <param name="inputValue">The input value.</param>
+        private void OnPlayer4Join(InputValue inputValue)
+        {
+            StartCoroutine(Join(4));
+        }
+
+        /// <summary>
+        /// Method <c>Join</c> is called when a player joins the game.
+        /// </summary>
+        private IEnumerator Join(int playerNumber)
+        {
+            if (m_PlayerManager.GetPlayer(playerNumber) != null)
+                yield break;
+            var tanks = m_TankManager.GetTanks();
+            m_PlayerManager.AddPlayer(playerNumber, tanks[playerNumber - 1]);
+            UpdatePlayerInfo();
+            SpawnTank(playerNumber);
+            SetCameraTargets();
+
+            messageText.text = "HERE COMES A NEW CHALLENGER!";
+            yield return new WaitForSeconds(2);
+            messageText.text = String.Empty;
+        }
+
+        /// <summary>
+        /// Method <c>UpdatePlayerInfo</c> updates the value of the player info text.
+        /// </summary>
+        private void UpdatePlayerInfo()
+        {
+            var maxPlayers = m_PlayerManager.GetMaxPlayers();
+            for (var i = 1; i <= maxPlayers; i++)
+            {
+                // Get the UI element for the player.
+                var playerInfo = playersInfo.transform.Find("Player" + i + "Info").gameObject;
+                var playerInfoTitle = playerInfo.transform.Find("Player" + i + "Title").gameObject
+                    .GetComponent<TextMeshProUGUI>();
+                var playerInfoText = playerInfo.transform.Find("Player" + i + "Wins").gameObject
+                    .GetComponent<TextMeshProUGUI>();
+
+                var player = m_PlayerManager.GetPlayer(i);
+                if (player != null)
+                {
+                    var color = player.Tank.playerColor;
+                    playerInfoTitle.color = new Color(color.r, color.g, color.b, 1);
+                }
+                playerInfoText.text = (player == null) ? "JOIN" : "WINS: " + player.Tank.wins;
             }
         }
     }
