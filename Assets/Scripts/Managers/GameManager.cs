@@ -35,6 +35,9 @@ namespace PEC1.Managers
         /// <value>Property <c>messageText</c> is a reference to the overlay Text to display winning text, etc.</value>
         [FormerlySerializedAs("m_MessageText")]
         public TextMeshProUGUI messageText;
+        
+        /// <value>Property <c>pauseMenu</c> is a reference to the pause menu.</value>
+        public GameObject pauseMenu;
 
         /// <value>Property <c>m_RoundNumber</c> represents which round the game is currently on.</value>
         private int m_RoundNumber;
@@ -293,7 +296,7 @@ namespace PEC1.Managers
         {
             m_PlayerInput.enabled = true;
             m_PlayerInput.SwitchCurrentControlScheme("Keyboard", Keyboard.current);
-            m_PlayerInput.SwitchCurrentActionMap("PlayerManagement");
+            m_PlayerInput.SwitchCurrentActionMap("GameManagement");
             var players = m_PlayerManager.GetPlayers();
             foreach (var p in players)
             {
@@ -380,6 +383,50 @@ namespace PEC1.Managers
                 }
                 playerInfoText.text = (player == null) ? "JOIN" : "WINS: " + player.tank.wins;
             }
+        }
+
+        /// <summary>
+        /// Method <c>OnPause</c> is called when the pause button is pressed.
+        /// </summary>
+        private void OnPause(InputValue inputValue)
+        {
+            TogglePause();
+        }
+
+        /// <summary>
+        /// Method <c>TooglePause</c> is used to pause the game.
+        /// </summary>
+        public void TogglePause()
+        {
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            if (pauseMenu.activeSelf)
+            {
+                DisableControls();
+            }
+            else
+            {
+                EnableControls();
+            }
+        }
+
+        /// <summary>
+        /// Method <c>TooglePause</c> is used to pause the game.
+        /// </summary>
+        public void GoToMainMenu()
+        {
+            Destroy(m_PlayerManager);
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        /// <summary>
+        /// Method <c>QuitGame</c> quits the game.
+        /// </summary>
+        public void ExitGame()
+        {
+            Application.Quit();
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #endif
         }
     }
 }

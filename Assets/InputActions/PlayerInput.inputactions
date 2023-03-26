@@ -508,7 +508,7 @@
             ]
         },
         {
-            "name": "PlayerManagement",
+            "name": "GameManagement",
             "id": "88b7245d-90b6-4f34-9de5-2bc8677e4655",
             "actions": [
                 {
@@ -524,6 +524,15 @@
                     "name": "Player4Join",
                     "type": "Button",
                     "id": "a4363a26-832d-453b-9641-8e4a1535e795",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "3dd082ef-0ef6-4fd8-a804-df3b9b4e202c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -550,6 +559,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Player4Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f89e76c-ee85-4f6c-86f4-f787e496761a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
