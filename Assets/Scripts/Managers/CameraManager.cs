@@ -162,6 +162,7 @@ namespace PEC1.Managers
         /// <param name="target">The target to add.</param>
         public void AddTargetToGroupCamera(GameObject target)
         {
+            if (m_GroupTargetCamera.FindMember(target.transform) > -1) return;
             m_GroupTargetCamera.AddMember(target.transform, 1, 0);
         }
         
@@ -171,6 +172,7 @@ namespace PEC1.Managers
         /// <param name="target">The target to remove.</param>
         public void RemoveTargetFromGroupCamera(GameObject target)
         {
+            if (m_GroupTargetCamera.FindMember(target.transform) == -1) return;
             m_GroupTargetCamera.RemoveMember(target.transform);
         }
 

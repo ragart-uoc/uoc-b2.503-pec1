@@ -280,6 +280,7 @@ namespace PEC1.Managers
             foreach (var p in players)
             {
                 p.tank.Reset();
+                m_CameraManager.AddTargetToGroupCamera(p.tank.instance);
                 p.camera.SetActive(true);
             }
             m_CameraManager.AdjustCameras();
