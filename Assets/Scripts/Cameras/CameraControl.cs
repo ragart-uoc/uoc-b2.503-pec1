@@ -8,7 +8,6 @@ namespace PEC1.Cameras
     /// </summary>
     public class CameraControl : MonoBehaviour
     {
-
         /// <value> Property <c>dampTime</c> represents the approximate time for the camera to refocus.</value>
         [FormerlySerializedAs("m_DampTime")]
         public float dampTime = 0.2f;
@@ -53,8 +52,8 @@ namespace PEC1.Cameras
         /// </summary>
         private void Awake()
         {
-            m_SplitMode = false;
-            m_Camera = GetComponentInChildren<Camera>();
+            //m_SplitMode = false;
+            //m_Camera = GetComponentInChildren<Camera>();
         }
 
         /// <summary>
@@ -63,10 +62,10 @@ namespace PEC1.Cameras
         private void FixedUpdate()
         {
             // Move the camera towards a desired position.
-            Move();
+            //Move();
 
             // Change the size of the camera based.
-            if (!m_SplitMode) Zoom();
+            //if (!m_SplitMode) Zoom();
 
             // Switch between single and split mode.
             //Split();

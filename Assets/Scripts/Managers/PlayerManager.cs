@@ -57,7 +57,7 @@ namespace PEC1.Managers
         /// <param name="playerNumber">The player number.</param>
         public Player GetPlayer(int playerNumber)
         {
-            return m_Players.Find(player => player.PlayerNumber == playerNumber);
+            return m_Players.Find(player => player.number == playerNumber);
         }
 
         /// <summary>

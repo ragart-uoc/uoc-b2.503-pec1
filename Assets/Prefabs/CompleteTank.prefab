@@ -10354,7 +10354,6 @@ GameObject:
   - component: {fileID: 11443146}
   - component: {fileID: 11409376}
   - component: {fileID: 11488788}
-  - component: {fileID: 8443080134631153712}
   - component: {fileID: 4118295802471685042}
   m_Layer: 9
   m_Name: CompleteTank
@@ -10666,20 +10665,6 @@ MonoBehaviour:
   minLaunchForce: 15
   maxLaunchForce: 30
   maxChargeTime: 0.75
---- !u!114 &8443080134631153712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 173472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa94e7e0601c4ed1bcbc9d6904d7f821, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smooth: 0.5
-  limitDist: 20
 --- !u!114 &4118295802471685042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10724,7 +10709,7 @@ MonoBehaviour:
     m_ActionName: Tank/Join[/Keyboard/enter,/Keyboard/numpadEnter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: f46cc9b5-98f1-4946-8756-89be46482c48
+  m_DefaultActionMap: Player1
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &173936

@@ -41,6 +41,9 @@ namespace PEC1.Entities
         /// <value>Property <c>m_Shooting</c> represents the tank's shooting script, used to disable and enable control.</value>
         private TankShooting m_Shooting;
 
+        /// <value>Property <c>m_Health</c> represents the tank's health script, used to disable and enable control.</value>
+        private TankHealth m_Health;
+
         /// <value>Property <c>m_CanvasGameObject</c> is used to disable the world space UI during the Starting and Ending phases of each round.</value>
         private GameObject m_CanvasGameObject;
 
@@ -55,12 +58,14 @@ namespace PEC1.Entities
             // Get references to the components.
             m_Movement = instance.GetComponent<TankMovement>();
             m_Shooting = instance.GetComponent<TankShooting>();
+            m_Health = instance.GetComponent<TankHealth>();
             m_PlayerInput = instance.GetComponent<PlayerInput>();
             m_CanvasGameObject = instance.GetComponentInChildren<Canvas>().gameObject;
 
             // Set the player numbers to be consistent across the scripts.
             m_Movement.playerNumber = playerNumber;
             m_Shooting.playerNumber = playerNumber;
+            m_Health.playerNumber = playerNumber;
 
             // Create a string using the correct color that says 'PLAYER 1' etc based on the tank's color and the player's number.
             coloredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(playerColor) + ">PLAYER " + playerNumber + "</color>";

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PEC1.Managers;
+using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -9,6 +10,10 @@ namespace PEC1.Entities
     /// </summary>
     public class TankHealth : MonoBehaviour
     {
+        /// <value>Property <c>playerNumber</c> is used to identify the different players.</value>
+        [FormerlySerializedAs("m_PlayerNumber")]
+        public int playerNumber = 1;
+        
         /// <value>Property <c>startingHealth</c> represents the amount of health each tank starts with.</value>
         [FormerlySerializedAs("m_StartingHealth")]
         public float startingHealth = 100f;
@@ -45,6 +50,10 @@ namespace PEC1.Entities
         /// <value>Property <c>m_Dead</c> represents whether or not the tank is currently dead.</value>
         private bool m_Dead;
 
+        private PlayerManager m_PlayerManager;
+        
+        private CameraManager m_CameraManager;
+
         /// <summary>
         /// Method <c>Awake</c> is called when the script instance is being loaded.
         /// </summary>
@@ -58,6 +67,10 @@ namespace PEC1.Entities
 
             // Disable the prefab so it can be activated when it's required.
             m_ExplosionParticles.gameObject.SetActive(false);
+            
+            // Get the managers.
+            m_PlayerManager = FindObjectOfType<PlayerManager>();
+            m_CameraManager = FindObjectOfType<CameraManager>();
         }
 
         /// <summary>
@@ -93,6 +106,7 @@ namespace PEC1.Entities
 
         /// <summary>
         /// Method <c>SetHealthUI</c> is used to update the health slider's value and color.
+        /// </summary>
         private void SetHealthUI()
         {
             // Set the slider's value appropriately.
@@ -122,6 +136,12 @@ namespace PEC1.Entities
 
             // Turn the tank off.
             gameObject.SetActive(false);
+            
+            // Disable the camera.
+            var player = m_PlayerManager.GetPlayer(playerNumber);
+            m_CameraManager.RemoveTargetFromGroupCamera(player.tank.instance);
+            player.camera.SetActive(false);
+            m_CameraManager.AdjustCameras();
         }
     }
 }
