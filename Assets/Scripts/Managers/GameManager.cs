@@ -137,8 +137,9 @@ namespace PEC1.Managers
             // This code is not run until 'RoundEnding' has finished.  At which point, check if a game winner has been found.
             if (m_GameWinner != null)
             {
-                // If there is a game winner, restart the level.
-                SceneManager.LoadScene("Game");
+                // If there is a game winner, destroy the player manager and go back to the main menu.
+                Destroy(m_PlayerManager.gameObject);
+                SceneManager.LoadScene("MainMenu");
             }
             else
             {
